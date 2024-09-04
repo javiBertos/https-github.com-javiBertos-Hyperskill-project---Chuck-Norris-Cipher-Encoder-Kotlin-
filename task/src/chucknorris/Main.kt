@@ -24,7 +24,6 @@ class ChuckNorrisEncoder {
 
     fun processDecryptedString(decryptedSTr: String): String {
         var binaryString = ""
-        println("The result:")
 
         for (chr in decryptedSTr.toCharArray()) {
             binaryString += Integer.toBinaryString(chr.code).padStart(7, '0')
@@ -37,7 +36,15 @@ class ChuckNorrisEncoder {
         var binStr = ""
         val blocks = encryptedStr.split(" ")
 
+        if (blocks.size % 2 != 0) {
+            throw Exception("Encoded string is not valid. The number of blocks is odd")
+        }
+
         for (i in 0..blocks.lastIndex step 2) {
+            if (blocks[i] != "0" && blocks[i] != "00") {
+                throw Exception("Encoded string is not valid. The first block of each sequence is not 0 or 00")
+            }
+
             binStr += blocks[i + 1].replace("0", if (blocks[i] == "0") "1" else "0")
         }
 
@@ -45,26 +52,65 @@ class ChuckNorrisEncoder {
     }
 
     fun processEncryptedString(encryptedSTr: String): String {
-        println("The result:")
+        if (encryptedSTr.replace("0", " ").trim() != "") {
+            throw Exception("Encoded string is not valid. The encoded message includes characters other than 0 or spaces")
+        }
 
-        return this.decryptFromChuckNorrisToBin(encryptedSTr)
-            .chunked(7){binCode -> Integer.parseInt(binCode.toString(), 2).toChar()}
+        val binaryString = this.decryptFromChuckNorrisToBin(encryptedSTr)
+
+        if (binaryString.length % 7 != 0) {
+            throw Exception("Encoded string is not valid. The length of the decoded binary string is not a multiple of 7")
+        }
+
+        return binaryString.chunked(7){binCode -> Integer.parseInt(binCode.toString(), 2).toChar()}
                 .joinToString("")
     }
 }
 
 fun main() {
-    // initialise input reader
+    // initialise input reader3
     val reader = Scanner(System.`in`)
 
     // initialise encoder class
     val encoder = ChuckNorrisEncoder()
 
-    // request an string and print the encrypted version
-    //println("Input string:")
-    //println(encoder.processDecryptedString(reader.nextLine()))
+    // option introduced by the user
+    var option: String = ""
 
-    // request a code and print the decrypted string
-    println("Input encoded string:")
-    println(encoder.processEncryptedString(reader.nextLine().trim()))
+    // request the option and manage what to do
+    do {
+        println("Please input operation (encode/decode/exit):")
+        option = reader.nextLine()
+
+        try {
+            when (option) {
+                "encode" -> {
+                    // request an string and print the encrypted version
+                    println("Input string:")
+
+                    val encodedString = encoder.processDecryptedString(reader.nextLine())
+
+                    println("Encoded string:\n$encodedString")
+                }
+
+                "decode" -> {
+                    // request a code and print the decrypted string
+                    println("Input encoded string:")
+
+                    val decodedString = encoder.processEncryptedString(reader.nextLine())
+
+                    println("Decoded string:\n$decodedString")
+                }
+
+                else -> println("There is no '$option' operation")
+            }
+        } catch (e: Exception) {
+            println(e.message)
+        }
+
+        println()
+
+    } while (option != "exit")
+
+    println("Bye!")
 }
