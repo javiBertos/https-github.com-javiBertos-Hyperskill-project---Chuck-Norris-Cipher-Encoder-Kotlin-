@@ -3,23 +3,23 @@ package chucknorris
 import java.util.Scanner
 
 class ChuckNorrisEncoder {
-    private fun encryptToChuckNorris(binStr: String): String {
-        var encodedStr = ""
+    private fun encryptToChuckNorrisFromBin(binStr: String): String {
+        var encryptedStr = ""
         var lastChar: Char = Char.MIN_VALUE
         var glue = ""
 
         for (c in binStr) {
             if (c == lastChar) {
-                encodedStr += '0'
+                encryptedStr += '0'
                 continue
             }
 
-            encodedStr += "$glue${if (c == '0') "00" else "0"} 0"
+            encryptedStr += "$glue${if (c == '0') "00" else "0"} 0"
             lastChar = c
             glue = " "
         }
 
-        return encodedStr
+        return encryptedStr
     }
 
     fun processDecryptedString(decryptedSTr: String): String {
@@ -30,7 +30,26 @@ class ChuckNorrisEncoder {
             binaryString += Integer.toBinaryString(chr.code).padStart(7, '0')
         }
 
-        return this.encryptToChuckNorris(binaryString)
+        return this.encryptToChuckNorrisFromBin(binaryString)
+    }
+
+    private fun decryptFromChuckNorrisToBin(encryptedStr: String): String {
+        var binStr = ""
+        val blocks = encryptedStr.split(" ")
+
+        for (i in 0..blocks.lastIndex step 2) {
+            binStr += blocks[i + 1].replace("0", if (blocks[i] == "0") "1" else "0")
+        }
+
+        return binStr
+    }
+
+    fun processEncryptedString(encryptedSTr: String): String {
+        println("The result:")
+
+        return this.decryptFromChuckNorrisToBin(encryptedSTr)
+            .chunked(7){binCode -> Integer.parseInt(binCode.toString(), 2).toChar()}
+                .joinToString("")
     }
 }
 
@@ -41,7 +60,11 @@ fun main() {
     // initialise encoder class
     val encoder = ChuckNorrisEncoder()
 
-    // request and print the line introduced and "encrypted"
-    println("Input string:")
-    println(encoder.processDecryptedString(reader.nextLine()))
+    // request an string and print the encrypted version
+    //println("Input string:")
+    //println(encoder.processDecryptedString(reader.nextLine()))
+
+    // request a code and print the decrypted string
+    println("Input encoded string:")
+    println(encoder.processEncryptedString(reader.nextLine().trim()))
 }
