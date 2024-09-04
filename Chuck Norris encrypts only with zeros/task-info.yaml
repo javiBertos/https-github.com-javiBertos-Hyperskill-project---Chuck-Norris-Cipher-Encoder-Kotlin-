@@ -1,0 +1,14 @@
+type: edu
+files:
+  - name: src/chucknorris/Main.kt
+    visible: true
+    learner_created: false
+  - name: test/ChuckNorrisTest.java
+    visible: false
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/23692#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Mon, 02 Sep 2024 15:14:56 UTC"
+record: 2

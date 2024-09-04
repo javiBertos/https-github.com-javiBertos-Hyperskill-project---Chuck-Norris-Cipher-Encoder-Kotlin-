@@ -1,0 +1,49 @@
+[1;31m
+Start test 1[0m
+-Please input operation (encode/decode/exit):
+	> encode
+Input string:
+> H W!
+Encoded string:
+P0 0 00 00 0 0 00 0000 0 0 00 00000 0 0 00 0 0 0 00 0 0 000 00 0 0 0 00 0000 0 0
+
+-Please input operation (encode/decode/exit):
+	> decode
+Input encoded string:
+R> 0 0 00 00 0 0 00 0000 0 0 00 00000 0 0 00 0 0 0 00 0 0 000 00 0 0 0 00 0000 0 0
+Decoded string:
+H W!
+
+-Please input operation (encode/decode/exit):
+> Hello world!
+%There is no 'Hello world!' operation
+
+-Please input operation (encode/decode/exit):
+	> decode
+Input encoded string:
+> hello world!
+\Encoded string is not valid. The encoded message includes characters other than 0 or spaces
+
+-Please input operation (encode/decode/exit):
+	> decode
+Input encoded string:
+L> 0 0 00 00 0 0 00 0000 0 0 00 0 0 00 0 0 0 00 0 0 000 00 0 0 0 00 0000 0 0
+9Encoded string is not valid. The number of blocks is odd
+
+-Please input operation (encode/decode/exit):
+	> decode
+Input encoded string:
+P> 0 0 00 00 0 0 00 000 0 0 00 0000 0 0 00 0 0 0 00 0 0 000 00 0 0 0 00 0000 0 0
+\Encoded string is not valid. The length of the decoded binary string is not a multiple of 7
+
+-Please input operation (encode/decode/exit):
+	> decode
+Input encoded string:
+> 0 0 00 00 0 0 000 000
+MEncoded string is not valid. The first block of each sequence is not 0 or 00
+
+-Please input operation (encode/decode/exit):
+> exit
+There is no 'exit' operation
+
+Bye!
