@@ -3,8 +3,12 @@ package chucknorris
 import java.util.Scanner
 
 class ChuckNorrisEncoder {
-    fun processDecryptedString(decryptedSTr: String): String {
-        return decryptedSTr.toCharArray().joinToString(" ")
+    fun processDecryptedString(decryptedSTr: String): Unit {
+        println("The result:")
+
+        for (chr in decryptedSTr.toCharArray()) {
+            println("$chr = ${Integer.toBinaryString(chr.code).padStart(7, '0')}")
+        }
     }
 }
 
@@ -17,5 +21,5 @@ fun main() {
 
     // request and print the line introduced and "encrypted"
     println("Input string:")
-    println(encoder.processDecryptedString(reader.nextLine()))
+    encoder.processDecryptedString(reader.nextLine())
 }
